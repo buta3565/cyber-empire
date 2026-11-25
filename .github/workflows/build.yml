@@ -21,11 +21,12 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
-          java-version: '17'
+          java-version: '21'
 
       - name: Build APK with Capacitor
         run: |
-          mkdir www
+          yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses || true
+          mkdir -p www
           cp index.html www/
           npm init -y
           npm install @capacitor/core @capacitor/cli @capacitor/android
