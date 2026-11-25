@@ -10,34 +10,34 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
-          node-version: '20'
+          node-version: '22'
 
       - name: Setup Java
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: 'temurin'
-          java-version: '21'
+          java-version: '17'
 
       - name: Build APK with Capacitor
         run: |
-          yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses || true
           mkdir -p www
           cp index.html www/
           npm init -y
-          npm install @capacitor/core @capacitor/cli @capacitor/android
+          npm install @capacitor/core@6 @capacitor/cli@6 @capacitor/android@6
           npx cap init "Cyber Empire" "com.buta356.cyberempire" --web-dir www
           npx cap add android
+          echo 'dependencies { implementation(platform("org.jetbrains.kotlin:kotlin-bom:1.8.22")) }' >> android/app/build.gradle
           cd android
           chmod +x gradlew
           ./gradlew assembleDebug
 
       - name: Upload APK
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: CyberEmpire-Android
           path: android/app/build/outputs/apk/debug/app-debug.apk
